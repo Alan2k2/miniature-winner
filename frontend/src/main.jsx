@@ -6,9 +6,9 @@ import './style.css';
 const defaults = {
   name: 'Alan Shaju',
   headline: 'Building for the web.',
-  intro: 'I’m Alan Shaju. This is my corner of the web for projects, experiments, and conversations about software.',
+  intro: 'I’m Alan Shaju, a senior software engineer working across full-stack development and application architecture.',
   about: 'I’m interested in building web applications that feel considered from the interface through to the backend.',
-  focus: 'React · Python · Django',
+  focus: 'Full stack · Application architecture',
   github: 'https://github.com/Alan2k2',
   linkedin: 'https://www.linkedin.com/in/alanshaju2k2/',
 };

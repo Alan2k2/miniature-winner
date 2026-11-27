@@ -15,7 +15,8 @@ class PortfolioTests(TestCase):
         self.token = self.client.cookies["csrftoken"].value
 
     def test_cms_content_and_admin_access(self):
-        Profile.objects.create(headline="From the CMS")
+        Profile.objects.update(headline="From the CMS")
+        Project.objects.all().delete()
         Project.objects.create(title="Draft")
         Project.objects.create(title="Published", published=True)
         data = self.client.get("/api/content/").json()
