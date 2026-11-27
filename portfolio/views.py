@@ -17,7 +17,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
 from geoip2.errors import AddressNotFoundError
 
-from .models import Contact, Profile, Project, Visit
+from .models import Contact, Experience, Profile, Project, Visit
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,13 @@ def content(request):
     profile = Profile.objects.first() or Profile()
     fields = ("name", "headline", "intro", "about", "github", "linkedin", "focus")
     projects = Project.objects.filter(published=True).values("id", "title", "description", "stack", "url")
-    return JsonResponse({"profile": model_to_dict(profile, fields=fields), "projects": list(projects)})
+    experience = Experience.objects.filter(published=True).values(
+        "id", "title", "organization", "period", "location", "description",
+    )
+    return JsonResponse({
+        "profile": model_to_dict(profile, fields=fields), "projects": list(projects),
+        "experience": list(experience),
+    })
 
 
 @lru_cache(maxsize=1)

@@ -5,7 +5,7 @@ from django.core import mail
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from .models import Contact, Profile, Project, Visit
+from .models import Contact, Experience, Profile, Project, Visit
 
 
 class PortfolioTests(TestCase):
@@ -16,12 +16,16 @@ class PortfolioTests(TestCase):
 
     def test_cms_content_and_admin_access(self):
         Profile.objects.update(headline="From the CMS")
+        self.assertEqual(Project.objects.filter(published=True).count(), 25)
         Project.objects.all().delete()
+        Experience.objects.create(title="Draft", organization="Example")
+        Experience.objects.create(title="Engineer", organization="Example", published=True)
         Project.objects.create(title="Draft")
         Project.objects.create(title="Published", published=True)
         data = self.client.get("/api/content/").json()
         self.assertEqual(data["profile"]["headline"], "From the CMS")
         self.assertEqual([project["title"] for project in data["projects"]], ["Published"])
+        self.assertEqual([role["title"] for role in data["experience"]], ["Engineer"])
         url = reverse("admin:portfolio_profile_changelist")
         self.assertEqual(self.client.get(url).status_code, 302)
         self.client.force_login(get_user_model().objects.create_superuser("editor"))

@@ -56,7 +56,8 @@ function ContactForm() {
 }
 
 function App() {
-  const [data, setData] = useState({ profile: defaults, projects: [] });
+  const [data, setData] = useState({ profile: defaults, projects: [], experience: [] });
+  const [query, setQuery] = useState('');
   const [menu, setMenu] = useState(false);
   const [privacy, setPrivacy] = useState(false);
 
@@ -74,7 +75,11 @@ function App() {
     }
   }, []);
 
-  const { profile, projects } = data;
+  const { profile, projects, experience } = data;
+  const term = query.trim().toLowerCase();
+  const displayedProjects = projects.filter(project =>
+    [project.title, project.description, project.stack].some(value => value.toLowerCase().includes(term))
+  );
   const initials = profile.name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('');
   return <>
     <header className="header" id="top"><div className="wrap bar">
@@ -82,6 +87,7 @@ function App() {
       <button className="menu-toggle" aria-expanded={menu} aria-controls="navigation" aria-label={menu ? 'Close navigation' : 'Open navigation'} onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</button>
       <nav id="navigation" className={menu ? 'open' : ''} aria-label="Main navigation">
         <a onClick={() => setMenu(false)} href="#work">Work</a>
+        <a onClick={() => setMenu(false)} href="#experience">Experience</a>
         <a onClick={() => setMenu(false)} href="#about">About</a>
         <a onClick={() => setMenu(false)} className="nav-contact" href="#contact">Get in touch <ArrowUpRight size={15} /></a>
       </nav>
@@ -103,14 +109,32 @@ function App() {
         </div>
       </section>
       <section className="wrap section" id="work">
-        <div className="section-heading"><div><div className="eyebrow"><span /> WORK</div><h2>Selected work<span>.</span></h2></div><a className="text-link" href={profile.github}>View GitHub <ArrowUpRight size={17} /></a></div>
+        <div className="section-heading"><div><div className="eyebrow"><span /> WORK</div><h2>GitHub repositories<span>.</span></h2></div><a className="text-link" href={profile.github}>View GitHub <ArrowUpRight size={17} /></a></div>
+        {projects.length > 0 && <div className="project-toolbar">
+          <label>Find a repository<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search by name or technology" /></label>
+          <p role="status">{displayedProjects.length} of {projects.length} repositories</p>
+        </div>}
         <div className="projects">
-          {projects.length ? projects.map(project => <article className="project" key={project.id}>
-            <span className="tile-icon"><Layers3 size={24} /></span><h3>{project.title}</h3><p>{project.description}</p>
+          {projects.length ? displayedProjects.map(project => <article className="project" key={project.id}>
+            <span className="tile-icon"><Layers3 size={24} /></span><h3>{project.title}</h3>{project.description && <p>{project.description}</p>}
             {project.stack && <div className="tags">{project.stack}</div>}
             {project.url && <a className="text-link" href={project.url}>View project <ArrowUpRight size={16} /></a>}
           </article>) : <article className="project project-empty"><span className="tile-icon"><Github size={27} /></span><div><h3>Explore my GitHub</h3><p>Browse my public repositories and follow what I’m working on.</p></div><a className="text-link" href={profile.github} aria-label="Explore my GitHub"><ArrowUpRight size={25} /></a></article>}
         </div>
+        {projects.length > 0 && displayedProjects.length === 0 && <p>No repositories match your search.</p>}
+      </section>
+      <section className="wrap section" id="experience">
+        <div className="section-heading">
+          <h2>Experience<span>.</span></h2>
+          <a className="text-link" href={profile.linkedin}>View LinkedIn <ArrowUpRight size={17} /></a>
+        </div>
+        {experience.length ? <div className="experience-list">
+          {experience.map(role => <article className="project" key={role.id}>
+            <h3>{role.title}</h3>
+            <p>{[role.organization, role.period, role.location].filter(Boolean).join(' · ')}</p>
+            {role.description && <p className="role-description">{role.description}</p>}
+          </article>)}
+        </div> : <p>Find my professional experience on LinkedIn.</p>}
       </section>
       <section className="wrap section about" id="about">
         <div><div className="eyebrow"><span /> ABOUT</div><h2>Hi, I’m {profile.name}<span>.</span></h2></div>

@@ -49,3 +49,19 @@ class Visit(models.Model):
     referrer_host = models.CharField(max_length=253, blank=True)
     language = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+
+class Experience(models.Model):
+    title = models.CharField(max_length=150)
+    organization = models.CharField(max_length=150)
+    period = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=150, blank=True)
+    description = models.TextField(blank=True)
+    position = models.PositiveIntegerField(default=0)
+    published = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["position", "pk"]
+
+    def __str__(self):
+        return f"{self.title} at {self.organization}"

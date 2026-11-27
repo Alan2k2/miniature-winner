@@ -97,3 +97,9 @@ footer { border-top: 1px solid var(--line); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+.project-toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; margin-bottom: 20px; }
+.project-toolbar label { width: min(100%, 345px); }
+.project h3 { overflow-wrap: anywhere; }
+.experience-list { display: grid; gap: 16px; }
+.role-description { white-space: pre-line; }

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Contact, Profile, Project, Visit
+from .models import Contact, Experience, Profile, Project, Visit
 
 
 @admin.register(Profile)
@@ -34,3 +34,10 @@ class VisitAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Alan Shaju · Portfolio CMS"
+
+
+@admin.register(Experience)
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ("title", "organization", "period", "published", "position")
+    list_editable = ("published", "position")
+    search_fields = ("title", "organization")

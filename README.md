@@ -15,7 +15,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Open the site at `http://127.0.0.1:8000/` and sign in at `/admin/`. Edit the Profile or add and publish Projects. The admin also lists contact submissions and visits. To develop with hot reload, run `npm run dev --prefix frontend` alongside Django and use the Vite URL. Run backend checks with `python manage.py test`.
+Open the site at `http://127.0.0.1:8000/` and sign in at `/admin/`. Edit the Profile, add or curate Projects, and publish roles from the Experience section of the admin. The initial project catalog includes the public repositories listed on the GitHub profile at the time of import. The admin also lists contact submissions and visits. To develop with hot reload, run `npm run dev --prefix frontend` alongside Django and use the Vite URL. Run backend checks with `python manage.py test`.
 
 ## Deploy to Render
 
