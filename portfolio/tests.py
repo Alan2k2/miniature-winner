@@ -18,6 +18,8 @@ class PortfolioTests(TestCase):
         Profile.objects.update(headline="From the CMS")
         self.assertEqual(Project.objects.filter(published=True).count(), 25)
         Project.objects.all().delete()
+        self.assertEqual(Experience.objects.filter(published=True).count(), 5)
+        Experience.objects.all().delete()
         Experience.objects.create(title="Draft", organization="Example")
         Experience.objects.create(title="Engineer", organization="Example", published=True)
         Project.objects.create(title="Draft")
