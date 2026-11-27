@@ -1,0 +1,6 @@
+Django>=5.2.0,<5.3
+whitenoise>=6.9,<7
+gunicorn>=23,<24
+dj-database-url>=2.3,<4
+psycopg[binary]>=3.2,<4
+geoip2>=5,<6
