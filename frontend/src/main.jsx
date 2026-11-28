@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Braces, Code2, Database, Github, Linkedin, Me
 import { HomeContent, ProjectCard } from './home-content.jsx';
 import { CareerPage, ContactPage } from './pages.jsx';
 import './style.css';
+import { GamesPage } from './games.jsx';
 
 const defaults = {
   name: 'Alan Shaju',
@@ -61,6 +62,7 @@ const navigation = [
   { label: 'Home', href: '/' },
   { label: 'Work', href: '/work/' },
   { label: 'Career', href: '/career/' },
+  { label: 'Own Built Games', href: '/games/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
@@ -109,6 +111,7 @@ function App() {
       </nav>
     </div></header>
     <main>
+      {page.href === '/games/' && <GamesPage />}
       {page.href === '/career/' && <CareerPage profile={profile} experience={experience} />}
       {page.href === '/contact/' && <ContactPage profile={profile}><ContactForm /></ContactPage>}
       {page.href === '/' && <>

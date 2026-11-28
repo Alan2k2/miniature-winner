@@ -1,0 +1,71 @@
+.games-page { padding-block: clamp(28px, 5vw, 66px); }
+.games-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, .5fr);
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 30px;
+  padding: clamp(22px, 5vw, 54px);
+  border: 1px solid #544173;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 90% 30%, #543178, transparent 62%), #1d182c;
+}
+.games-hero h1 { margin-block: 14px; }
+.games-hero p { max-width: 36ch; }
+.arcade-art {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  background-image: radial-gradient(#c5a6ff55 1px, transparent 1px);
+  background-size: 13px 13px;
+  mask-image: radial-gradient(ellipse, #000 50%, transparent 95%);
+}
+.arcade-pad {
+  display: grid;
+  width: clamp(105px, 14vw, 155px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 29%;
+  border: 1px solid #bc9afb;
+  color: #e6d6ff;
+  background: linear-gradient(145deg, #7851a7, #392453);
+  box-shadow: 0 16px 40px #130c26;
+  transform: rotate(-12deg);
+}
+.arcade-layout { display: grid; grid-template-columns: minmax(175px, .34fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.game-picker, .game-player { min-width: 0; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
+.game-picker { display: grid; gap: 10px; padding: 14px; }
+.game-picker h2, .player-header h2 { font-size: 1.28rem; letter-spacing: -.03em; margin: 0; }
+.game-picker h2 { margin: 4px 2px; }
+.game-choice {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #15131e;
+  padding: 8px;
+}
+.game-choice:hover, .game-choice[aria-pressed="true"] { background: #2b2040; border-color: #8b6ab9; }
+.game-choice small { display: block; color: var(--muted); margin-top: 3px; }
+.game-icon { display: grid; place-items: center; width: 39px; aspect-ratio: 1; border-radius: 9px; color: #e4c6ff; background: #442b64; }
+.game-choice-snake .game-icon { color: #b3f5dc; background: #204738; }
+.player-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 17px; }
+.player-header p, .player-note { font-size: .88rem; }
+.game-frame { display: block; width: 100%; height: clamp(480px, 73vh, 780px); border: 0; border-block: 1px solid var(--line); background: #110f19; }
+.player-note { padding: 11px 17px; }
+@media (max-width: 760px) {
+  .arcade-layout { grid-template-columns: minmax(0, 1fr); }
+  .game-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .game-picker h2 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .games-hero { grid-template-columns: minmax(0, 1fr); }
+  .arcade-art { display: none; }
+  .game-choice { grid-template-columns: auto minmax(0, 1fr); }
+  .game-choice > svg { display: none; }
+}

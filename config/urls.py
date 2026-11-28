@@ -8,6 +8,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("work/", views.home, name="work"),
     path("career/", views.home, name="career"),
+    path("games/", views.home, name="games"),
     path("contact/", views.home, name="contact"),
     path("admin/", admin.site.urls),
     path("api/content/", views.content),
