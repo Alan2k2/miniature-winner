@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowUpRight, Braces, Code2, Database, Github, Layers3, Linkedin, Menu, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Braces, Code2, Database, Github, Linkedin, Menu, X } from 'lucide-react';
+import { HomeContent, ProjectCard } from './home-content.jsx';
 import { CareerPage, ContactPage } from './pages.jsx';
 import './style.css';
 
@@ -126,10 +127,7 @@ function App() {
           <div className="art-caption"><span /> {profile.focus}</div>
         </div>
       </section>
-      <section className="wrap section home-links" aria-label="Explore the portfolio">
-        <a className="project" id="work" href="/work/"><Layers3 size={24} aria-hidden="true" /><h2>Work</h2><p>Explore my public repositories and software projects.</p><ArrowUpRight size={19} aria-hidden="true" /></a>
-        <a className="project" id="experience" href="/career/"><Braces size={24} aria-hidden="true" /><h2>Career</h2><p>See where I’ve worked and the roles I’ve held.</p><ArrowUpRight size={19} aria-hidden="true" /></a>
-      </section>
+      <HomeContent projects={projects} experience={experience} />
       <section className="wrap section about" id="about">
         <div><div className="eyebrow"><span /> ABOUT</div><h2>Hi, I’m {profile.name}<span>.</span></h2></div>
         <div><p>{profile.about}</p><div className="tags"><Braces size={17} /> {profile.focus}</div><a className="text-link" href={profile.linkedin}><Linkedin size={18} /> Find me on LinkedIn <ArrowUpRight size={16} /></a></div>
@@ -147,11 +145,7 @@ function App() {
           <p role="status">{displayedProjects.length} of {projects.length} repositories</p>
         </div>}
         <div className="projects">
-          {projects.length ? displayedProjects.map(project => <article className="project" key={project.id}>
-            <span className="tile-icon"><Layers3 size={24} /></span><h3>{project.title}</h3>{project.description && <p>{project.description}</p>}
-            {project.stack && <div className="tags">{project.stack}</div>}
-            {project.url && <a className="text-link" href={project.url}>View project <ArrowUpRight size={16} /></a>}
-          </article>) : <article className="project project-empty"><span className="tile-icon"><Github size={27} /></span><div><h3>Explore my GitHub</h3><p>Browse my public repositories and follow what I’m working on.</p></div><a className="text-link" href={profile.github} aria-label="Explore my GitHub"><ArrowUpRight size={25} /></a></article>}
+          {projects.length ? displayedProjects.map(project => <ProjectCard key={project.id} project={project} />) : <article className="project project-empty"><span className="tile-icon"><Github size={27} /></span><div><h3>Explore my GitHub</h3><p>Browse my public repositories and follow what I’m working on.</p></div><a className="text-link" href={profile.github} aria-label="Explore my GitHub"><ArrowUpRight size={25} /></a></article>}
         </div>
         {projects.length > 0 && displayedProjects.length === 0 && <p>No repositories match your search.</p>}
       </section>
