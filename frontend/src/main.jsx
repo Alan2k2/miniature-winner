@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowDown, ArrowRight, ArrowUpRight, Braces, Code2, Database, Github, Layers3, Linkedin, Mail, Menu, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Braces, Code2, Database, Github, Layers3, Linkedin, Menu, X } from 'lucide-react';
+import { CareerPage, ContactPage } from './pages.jsx';
 import './style.css';
 
 const defaults = {
@@ -32,8 +33,8 @@ function ContactForm() {
     setState({ pending: true });
     try {
       const response = await post('contact', new FormData(form));
-      const data = await response.json();
-      if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.ok) {
         throw new Error(Object.values(data.errors || {}).flat().join(' ') || 'Unable to send your message.');
       }
       form.reset();
@@ -55,7 +56,16 @@ function ContactForm() {
   </form>;
 }
 
+const navigation = [
+  { label: 'Home', href: '/' },
+  { label: 'Work', href: '/work/' },
+  { label: 'Career', href: '/career/' },
+  { label: 'Contact', href: '/contact/' },
+];
+
 function App() {
+  const path = window.location.pathname.replace(/\/?$/, '/');
+  const page = navigation.find(item => item.href === path) || navigation[0];
   const [data, setData] = useState({ profile: defaults, projects: [], experience: [] });
   const [query, setQuery] = useState('');
   const [menu, setMenu] = useState(false);
@@ -76,6 +86,9 @@ function App() {
   }, []);
 
   const { profile, projects, experience } = data;
+  useEffect(() => {
+    document.title = page.href === '/' ? `${profile.name} — Portfolio` : `${page.label} — ${profile.name}`;
+  }, [page, profile.name]);
   const term = query.trim().toLowerCase();
   const displayedProjects = projects.filter(project =>
     [project.title, project.description, project.stack].some(value => value.toLowerCase().includes(term))
@@ -83,22 +96,27 @@ function App() {
   const initials = profile.name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('');
   return <>
     <header className="header" id="top"><div className="wrap bar">
-      <a className="brand" href="#top"><span><Code2 size={20} /></span>{profile.name}</a>
+      <a className="brand" href="/"><span><Code2 size={20} /></span>{profile.name}</a>
       <button className="menu-toggle" aria-expanded={menu} aria-controls="navigation" aria-label={menu ? 'Close navigation' : 'Open navigation'} onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</button>
       <nav id="navigation" className={menu ? 'open' : ''} aria-label="Main navigation">
-        <a onClick={() => setMenu(false)} href="#work">Work</a>
-        <a onClick={() => setMenu(false)} href="#experience">Experience</a>
-        <a onClick={() => setMenu(false)} href="#about">About</a>
-        <a onClick={() => setMenu(false)} className="nav-contact" href="#contact">Get in touch <ArrowUpRight size={15} /></a>
+        {navigation.map(item => <a
+          className={item.href === '/contact/' ? 'nav-contact' : undefined}
+          href={item.href}
+          aria-current={page.href === item.href ? 'page' : undefined}
+          key={item.href}
+        >{item.label}{item.href === '/contact/' && <ArrowUpRight size={15} />}</a>)}
       </nav>
     </div></header>
     <main>
+      {page.href === '/career/' && <CareerPage profile={profile} experience={experience} />}
+      {page.href === '/contact/' && <ContactPage profile={profile}><ContactForm /></ContactPage>}
+      {page.href === '/' && <>
       <section className="wrap hero">
         <div className="hero-copy">
           <div className="eyebrow"><span /> PERSONAL PORTFOLIO</div>
           <h1>{profile.headline}</h1>
           <p>{profile.intro}</p>
-          <div className="actions"><a className="button primary" href="#work">Explore my work <ArrowDown size={17} /></a><a className="button secondary" href={profile.github}><Github size={18} /> GitHub <ArrowUpRight size={15} /></a></div>
+          <div className="actions"><a className="button primary" href="/work/">Explore my work <ArrowRight size={17} /></a><a className="button secondary" href={profile.github}><Github size={18} /> GitHub <ArrowUpRight size={15} /></a></div>
         </div>
         <div className="art" aria-hidden="true">
           <div className="art-top"><i /><i /><i /></div>
@@ -108,8 +126,22 @@ function App() {
           <div className="art-caption"><span /> {profile.focus}</div>
         </div>
       </section>
-      <section className="wrap section" id="work">
-        <div className="section-heading"><div><div className="eyebrow"><span /> WORK</div><h2>GitHub repositories<span>.</span></h2></div><a className="text-link" href={profile.github}>View GitHub <ArrowUpRight size={17} /></a></div>
+      <section className="wrap section home-links" aria-label="Explore the portfolio">
+        <a className="project" id="work" href="/work/"><Layers3 size={24} aria-hidden="true" /><h2>Work</h2><p>Explore my public repositories and software projects.</p><ArrowUpRight size={19} aria-hidden="true" /></a>
+        <a className="project" id="experience" href="/career/"><Braces size={24} aria-hidden="true" /><h2>Career</h2><p>See where I’ve worked and the roles I’ve held.</p><ArrowUpRight size={19} aria-hidden="true" /></a>
+      </section>
+      <section className="wrap section about" id="about">
+        <div><div className="eyebrow"><span /> ABOUT</div><h2>Hi, I’m {profile.name}<span>.</span></h2></div>
+        <div><p>{profile.about}</p><div className="tags"><Braces size={17} /> {profile.focus}</div><a className="text-link" href={profile.linkedin}><Linkedin size={18} /> Find me on LinkedIn <ArrowUpRight size={16} /></a></div>
+      </section>
+      <section className="wrap section page-next" id="contact">
+        <h2>Let’s talk<span>.</span></h2>
+        <a className="button primary" href="/contact/">Get in touch <ArrowRight size={17} /></a>
+      </section>
+      </>}
+      {page.href === '/work/' &&
+      <section className="wrap page-hero work-page">
+        <div className="section-heading"><div><div className="eyebrow"><span /> WORK</div><h1>GitHub repositories.</h1></div><a className="text-link" href={profile.github}>View GitHub <ArrowUpRight size={17} /></a></div>
         {projects.length > 0 && <div className="project-toolbar">
           <label>Find a repository<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search by name or technology" /></label>
           <p role="status">{displayedProjects.length} of {projects.length} repositories</p>
@@ -123,30 +155,10 @@ function App() {
         </div>
         {projects.length > 0 && displayedProjects.length === 0 && <p>No repositories match your search.</p>}
       </section>
-      <section className="wrap section" id="experience">
-        <div className="section-heading">
-          <h2>Experience<span>.</span></h2>
-          <a className="text-link" href={profile.linkedin}>View LinkedIn <ArrowUpRight size={17} /></a>
-        </div>
-        {experience.length ? <div className="experience-list">
-          {experience.map(role => <article className="project" key={role.id}>
-            <h3>{role.title}</h3>
-            <p>{[role.organization, role.period, role.location].filter(Boolean).join(' · ')}</p>
-            {role.description && <p className="role-description">{role.description}</p>}
-          </article>)}
-        </div> : <p>Find my professional experience on LinkedIn.</p>}
-      </section>
-      <section className="wrap section about" id="about">
-        <div><div className="eyebrow"><span /> ABOUT</div><h2>Hi, I’m {profile.name}<span>.</span></h2></div>
-        <div><p>{profile.about}</p><div className="tags"><Braces size={17} /> {profile.focus}</div><a className="text-link" href={profile.linkedin}><Linkedin size={18} /> Find me on LinkedIn <ArrowUpRight size={16} /></a></div>
-      </section>
-      <section className="wrap section contact" id="contact">
-        <div><div className="eyebrow"><span /> CONTACT</div><h2>Let’s talk<span>.</span></h2><p>Have a project in mind or something you’d like to discuss? Send me a message.</p><Mail size={27} className="mail-icon" /></div>
-        <ContactForm />
-      </section>
+      }
     </main>
     <footer><div className="wrap footer">
-      <a className="brand" href="#top"><span><Code2 size={20} /></span>{profile.name}</a>
+      <a className="brand" href="/"><span><Code2 size={20} /></span>{profile.name}</a>
       <button className="plain" onClick={() => setPrivacy(!privacy)} aria-expanded={privacy}>Privacy</button>
       <div className="socials"><a href={profile.github} aria-label="GitHub"><Github size={21} /></a><a href={profile.linkedin} aria-label="LinkedIn"><Linkedin size={21} /></a></div>
       {privacy && <div className="privacy"><p>This site records visitor IP addresses, approximate location when available, browser user agent, preferred language, and referring site domain. Use the button below to disable future visit logging in this browser.</p><button className="button secondary" onClick={event => { localStorage.setItem('portfolio-no-analytics', '1'); event.currentTarget.textContent = 'Visit logging disabled'; }}>Disable visit logging</button></div>}

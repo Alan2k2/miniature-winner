@@ -5,7 +5,10 @@ from django.urls import path
 from portfolio import views
 
 urlpatterns = [
-    path("", views.home),
+    path("", views.home, name="home"),
+    path("work/", views.home, name="work"),
+    path("career/", views.home, name="career"),
+    path("contact/", views.home, name="contact"),
     path("admin/", admin.site.urls),
     path("api/content/", views.content),
     path("api/csrf/", views.csrf),
