@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, BrainCircuit, Gamepad2, Grid2X2, Play } from 'lucide-react';
+import { ArrowUpRight, BrainCircuit, Gamepad2, Grid2X2, Play, Trees } from 'lucide-react';
 import './games.css';
 
 const games = [
@@ -19,6 +19,14 @@ const games = [
     url: 'https://snake-arcade-n051.onrender.com/',
     icon: Grid2X2,
   },
+  {
+    id: 'pinefall',
+    title: 'Wildreach Pinefall',
+    genre: 'Browser game',
+    description: 'Play Wildreach Pinefall in the arcade.',
+    url: 'https://wildreach-pinefall.onrender.com/',
+    icon: Trees,
+  },
 ];
 
 export function GamesPage() {
@@ -29,7 +37,7 @@ export function GamesPage() {
       <div>
         <div className="eyebrow"><span /> OWN BUILT GAMES</div>
         <h1>The Arcade.</h1>
-        <p>Two browser games I built. Pick a game to play here.</p>
+        <p>Pick one of my browser games to play here.</p>
       </div>
       <div className="arcade-art" aria-hidden="true">
         <div className="arcade-pad"><Gamepad2 size={68} strokeWidth={1.4} /></div>

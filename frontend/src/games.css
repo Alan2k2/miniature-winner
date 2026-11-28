@@ -54,6 +54,7 @@
 .game-choice small { display: block; color: var(--muted); margin-top: 3px; }
 .game-icon { display: grid; place-items: center; width: 39px; aspect-ratio: 1; border-radius: 9px; color: #e4c6ff; background: #442b64; }
 .game-choice-snake .game-icon { color: #b3f5dc; background: #204738; }
+.game-choice-pinefall .game-icon { color: #f7d7a1; background: #503724; }
 .player-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 17px; }
 .player-header p, .player-note { font-size: .88rem; }
 .game-frame { display: block; width: 100%; height: clamp(480px, 73vh, 780px); border: 0; border-block: 1px solid var(--line); background: #110f19; }
